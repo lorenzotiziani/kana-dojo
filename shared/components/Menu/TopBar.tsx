@@ -205,7 +205,7 @@ const TopBar: React.FC<ITopBarProps> = ({ currentDojo }: ITopBarProps) => {
                 >
                   <button
                     className={clsx(
-                      'w-full h-12 px-6 flex flex-row justify-center items-center gap-2',
+                      'w-full h-12 px-2 sm:px-6 flex flex-row justify-center items-center gap-2',
                       'bg-[var(--secondary-color)] text-[var(--background-color)]',
                       'rounded-2xl transition-colors duration-200',
                       'border-b-6 border-[var(--secondary-color-accent)] shadow-sm',
@@ -225,7 +225,7 @@ const TopBar: React.FC<ITopBarProps> = ({ currentDojo }: ITopBarProps) => {
                   disabled={!selectedGameMode || !isFilled}
                   ref={buttonRef}
                   className={clsx(
-                    'w-full h-12 px-6 flex flex-row justify-center items-center gap-2',
+                    'w-full h-12 px-2 sm:px-6 flex flex-row justify-center items-center gap-2',
                     'rounded-2xl transition-colors duration-200',
                     'font-medium border-b-6 shadow-sm',
                     'hover:cursor-pointer',
