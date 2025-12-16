@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import clsx from 'clsx';
 import { useClick } from '@/shared/hooks/useAudio';
 import useDecorationsStore from '@/shared/store/useDecorationsStore';
-import Decorations from './Decorations';
+import Decorations from '@/features/MainMenu/Decorations';
 
 const ZenMode = () => {
   const [isMounted, setIsMounted] = useState(false);
@@ -17,10 +17,8 @@ const ZenMode = () => {
 
   useEffect(() => {
     setIsMounted(true);
-    // Hide bottom bar when entering zen mode
     setExpandDecorations(true);
 
-    // Show bottom bar when leaving zen mode
     return () => {
       setExpandDecorations(false);
     };
