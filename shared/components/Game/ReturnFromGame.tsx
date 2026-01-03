@@ -142,7 +142,7 @@ const Return = ({ isHidden, href, gameMode }: ReturnProps) => {
 
           {/* Stats button - hidden on small screens, visible on sm and up */}
           <ActionButton
-            borderRadius='2xl'
+            borderRadius='3xl'
             borderBottomThickness={8}
             className='hidden w-auto p-2 text-xl sm:flex md:px-6'
             onClick={handleShowStats}

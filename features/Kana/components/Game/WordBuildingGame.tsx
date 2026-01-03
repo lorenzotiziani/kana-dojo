@@ -15,6 +15,8 @@ import useStatsStore from '@/features/Progress/store/useStatsStore';
 import { useShallow } from 'zustand/react/shallow';
 import useStats from '@/shared/hooks/useStats';
 import { ActionButton } from '@/shared/components/ui/ActionButton';
+import { useStopwatch } from 'react-timer-hook';
+import { useSmartReverseMode } from '@/shared/hooks/useSmartReverseMode';
 
 const random = new Random();
 const adaptiveSelector = getGlobalAdaptiveSelector();
@@ -97,19 +99,36 @@ type BottomBarState = 'check' | 'correct' | 'wrong';
 
 interface WordBuildingGameProps {
   isHidden: boolean;
-  isReverse: boolean;
-  wordLength: number;
-  onCorrect: (chars: string[]) => void;
-  onWrong: () => void;
+  /** Optional: externally controlled reverse mode. If not provided, uses internal useSmartReverseMode */
+  isReverse?: boolean;
+  /** Optional: word length. Defaults to 3 */
+  wordLength?: number;
+  /** Optional: callback when answer is correct. If not provided, handles internally */
+  onCorrect?: (chars: string[]) => void;
+  /** Optional: callback when answer is wrong. If not provided, handles internally */
+  onWrong?: () => void;
 }
 
 const WordBuildingGame = ({
   isHidden,
-  isReverse,
-  wordLength,
-  onCorrect,
-  onWrong
+  isReverse: externalIsReverse,
+  wordLength: externalWordLength = 3,
+  onCorrect: externalOnCorrect,
+  onWrong: externalOnWrong
 }: WordBuildingGameProps) => {
+  // Smart reverse mode - used when not controlled externally
+  const {
+    isReverse: internalIsReverse,
+    decideNextMode: decideNextReverseMode,
+    recordWrongAnswer: recordReverseModeWrong
+  } = useSmartReverseMode();
+
+  // Use external isReverse if provided, otherwise use internal smart mode
+  const isReverse = externalIsReverse ?? internalIsReverse;
+  const wordLength = externalWordLength;
+
+  // Answer timing for speed achievements
+  const speedStopwatch = useStopwatch({ autoStart: false });
   const { playCorrect } = useCorrect();
   const { playErrorTwice } = useError();
   const { playClick } = useClick();
@@ -122,7 +141,8 @@ const WordBuildingGame = ({
     incrementHiraganaCorrect,
     incrementKatakanaCorrect,
     incrementWrongStreak,
-    resetWrongStreak
+    resetWrongStreak,
+    recordAnswerTime
   } = useStatsStore(
     useShallow(state => ({
       score: state.score,
@@ -130,7 +150,8 @@ const WordBuildingGame = ({
       incrementHiraganaCorrect: state.incrementHiraganaCorrect,
       incrementKatakanaCorrect: state.incrementKatakanaCorrect,
       incrementWrongStreak: state.incrementWrongStreak,
-      resetWrongStreak: state.resetWrongStreak
+      resetWrongStreak: state.resetWrongStreak,
+      recordAnswerTime: state.recordAnswerTime
     }))
   );
 
@@ -138,7 +159,8 @@ const WordBuildingGame = ({
     incrementCorrectAnswers,
     incrementWrongAnswers,
     addCharacterToHistory,
-    incrementCharacterScore
+    incrementCharacterScore,
+    addCorrectAnswerTime
   } = useStats();
 
   const kanaGroupIndices = useKanaStore(state => state.kanaGroupIndices);
@@ -229,11 +251,23 @@ const WordBuildingGame = ({
     setPlacedTiles([]);
     setIsChecking(false);
     setBottomBarState('check');
+    // Start timing for the new question
+    speedStopwatch.reset();
+    speedStopwatch.start();
   }, [generateWord]);
+  // Note: speedStopwatch deliberately excluded - only calling methods
 
   useEffect(() => {
     resetGame();
   }, [isReverse, wordLength, resetGame]);
+
+  // Pause stopwatch when game is hidden
+  useEffect(() => {
+    if (isHidden) {
+      speedStopwatch.pause();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isHidden]); // speedStopwatch intentionally excluded - only calling methods
 
   // Keyboard shortcut for Enter/Space to trigger button
   useEffect(() => {
@@ -255,6 +289,10 @@ const WordBuildingGame = ({
   const handleCheck = useCallback(() => {
     if (placedTiles.length === 0) return;
 
+    // Stop timing and record answer time
+    speedStopwatch.pause();
+    const answerTimeMs = speedStopwatch.totalMilliseconds;
+
     playClick();
     setIsChecking(true);
 
@@ -263,6 +301,11 @@ const WordBuildingGame = ({
       placedTiles.every((tile, i) => tile === wordData.answerChars[i]);
 
     if (isCorrect) {
+      // Record answer time for speed achievements
+      addCorrectAnswerTime(answerTimeMs / 1000);
+      recordAnswerTime(answerTimeMs);
+      speedStopwatch.reset();
+
       playCorrect();
       triggerCrazyMode();
       resetWrongStreak();
@@ -282,7 +325,13 @@ const WordBuildingGame = ({
       incrementCorrectAnswers();
       setScore(score + wordData.wordChars.length);
       setBottomBarState('correct');
+
+      // Advance smart reverse mode if not externally controlled
+      if (externalIsReverse === undefined) {
+        decideNextReverseMode();
+      }
     } else {
+      speedStopwatch.reset();
       playErrorTwice();
       triggerCrazyMode();
       incrementWrongStreak();
@@ -299,7 +348,13 @@ const WordBuildingGame = ({
 
       setBottomBarState('wrong');
 
-      onWrong();
+      // Reset smart reverse mode streak if not externally controlled
+      if (externalIsReverse === undefined) {
+        recordReverseModeWrong();
+      }
+
+      // Call external callback if provided
+      externalOnWrong?.();
     }
   }, [
     placedTiles,
@@ -318,17 +373,29 @@ const WordBuildingGame = ({
     incrementWrongAnswers,
     score,
     setScore,
-    onWrong
+    externalOnWrong,
+    externalIsReverse,
+    decideNextReverseMode,
+    recordReverseModeWrong,
+    addCorrectAnswerTime,
+    recordAnswerTime
+    // speedStopwatch intentionally excluded - only calling methods
   ]);
 
   // Handle Continue button
   const handleContinue = useCallback(() => {
     playClick();
     if (bottomBarState === 'correct') {
-      onCorrect(wordData.wordChars);
+      externalOnCorrect?.(wordData.wordChars);
     }
     resetGame();
-  }, [playClick, bottomBarState, onCorrect, wordData.wordChars, resetGame]);
+  }, [
+    playClick,
+    bottomBarState,
+    externalOnCorrect,
+    wordData.wordChars,
+    resetGame
+  ]);
 
   // Handle tile click - add or remove
   const handleTileClick = useCallback(
@@ -502,7 +569,9 @@ const WordBuildingGame = ({
               )}
               onClick={showContinue ? handleContinue : handleCheck}
             >
-              <span>{showContinue ? 'continue' : 'check'}</span>
+              <span className='max-sm:hidden'>
+                {showContinue ? 'continue' : 'check'}
+              </span>
               {showContinue ? (
                 <CircleArrowRight className='h-8 w-8' />
               ) : (
