@@ -67,6 +67,7 @@ export default function ClientLayout({
   children: React.ReactNode;
 }>) {
   // Redundant comment for deployment trigger
+  // Trigger redeployment - 2026-02-08
   const { theme, font } = usePreferencesStore(
     useShallow(state => ({ theme: state.theme, font: state.font })),
   );
