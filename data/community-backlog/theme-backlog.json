@@ -819,7 +819,9 @@
     "mainColor": "oklch(68.0% 0.155 315.0 / 1)",
     "secondaryColor": "oklch(75.0% 0.125 280.0 / 1)",
     "issued": false,
-    "completed": false
+    "completed": true,
+    "completedBy": "Godson-Ozioma",
+    "completedPR": 5017
   },
   {
     "id": "lucky-bamboo",
