@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import type { CSSProperties } from 'react';
 import { cn } from '@/shared/lib/utils';
 import {
   Swords,
@@ -12,6 +13,9 @@ import {
   Trophy,
 } from 'lucide-react';
 import type { GauntletOverallStats } from '../../types/stats';
+
+const GAUNTLET_PANEL_HALO_GAP = 8;
+const GAUNTLET_STAT_ITEM_HALO_GAP = 6;
 
 /**
  * Props for the GauntletStatsPanel component
@@ -62,34 +66,39 @@ function StatItem({
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: index * 0.05 }}
-      className={cn(
-        'group/item cursor-pointer rounded-2xl p-4',
-        'bg-(--background-color)',
-        'border border-transparent',
-        'transition-colors duration-300',
-        'hover:border-(--main-color)/20',
-      )}
+      className='rounded-(--gauntlet-item-outer-radius) border-2 border-(--border-color) p-(--gauntlet-item-halo-gap)'
+      style={
+        {
+          '--gauntlet-item-halo-gap': `${GAUNTLET_STAT_ITEM_HALO_GAP}px`,
+          '--gauntlet-item-outer-radius':
+            'calc(var(--radius-2xl) + var(--gauntlet-item-halo-gap))',
+          '--gauntlet-item-inner-radius':
+            'calc(var(--gauntlet-item-outer-radius) - var(--gauntlet-item-halo-gap))',
+        } as CSSProperties
+      }
     >
-      <div className='flex items-center gap-4'>
-        <div
-          className={cn(
-            'flex h-12 w-12 shrink-0 items-center justify-center rounded-xl',
-            'bg-gradient-to-br from-(--main-color)/10 to-(--secondary-color)/5',
-            'text-(--main-color)',
-            'transition-colors duration-300',
-            'group-hover/item:from-(--main-color)/15 group-hover/item:to-(--secondary-color)/10',
-          )}
-        >
-          <Icon className='h-5 w-5' />
-        </div>
-        <div className='min-w-0 flex-1'>
-          <p className='text-xs font-medium text-(--secondary-color)'>
-            {label}
-          </p>
-          <p className='text-xl font-bold text-(--main-color)'>{value}</p>
-          {subValue && (
-            <p className='text-xs text-(--secondary-color)/60'>{subValue}</p>
-          )}
+      <div className='group/item rounded-(--gauntlet-item-inner-radius) bg-(--background-color) p-4'>
+        <div className='flex items-center gap-4'>
+          <div
+            className={cn(
+              'flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl',
+              'bg-gradient-to-br from-(--main-color)/10 to-(--secondary-color)/5',
+              'text-(--main-color)',
+              'transition-colors duration-300',
+              'group-hover/item:from-(--main-color)/15 group-hover/item:to-(--secondary-color)/10',
+            )}
+          >
+            <Icon className='h-5 w-5' />
+          </div>
+          <div className='min-w-0 flex-1'>
+            <p className='text-xs font-medium text-(--secondary-color)'>
+              {label}
+            </p>
+            <p className='text-xl font-bold text-(--main-color)'>{value}</p>
+            {subValue && (
+              <p className='text-xs text-(--secondary-color)/60'>{subValue}</p>
+            )}
+          </div>
         </div>
       </div>
     </motion.div>
@@ -109,7 +118,7 @@ function LoadingSkeleton() {
         >
           <div className='animate-shimmer absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-(--card-color)/50 to-transparent' />
           <div className='flex items-center gap-4'>
-            <div className='h-12 w-12 shrink-0 rounded-xl bg-(--border-color)/30' />
+            <div className='h-12 w-12 flex-shrink-0 rounded-xl bg-(--border-color)/30' />
             <div className='flex-1 space-y-2'>
               <div className='h-3 w-16 rounded bg-(--border-color)/30' />
               <div className='h-5 w-12 rounded bg-(--border-color)/30' />
@@ -185,52 +194,63 @@ export default function GauntletStatsPanel({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.5 }}
       className={cn(
-        'group relative overflow-hidden rounded-3xl',
-        'border border-(--border-color)/50 bg-(--card-color)',
-        'p-6',
+        'rounded-(--gauntlet-panel-outer-radius) border-4 border-(--border-color) p-(--gauntlet-panel-halo-gap)',
         className,
       )}
+      style={
+        {
+          '--gauntlet-panel-halo-gap': `${GAUNTLET_PANEL_HALO_GAP}px`,
+          '--gauntlet-panel-outer-radius':
+            'calc(var(--radius-3xl) + var(--gauntlet-panel-halo-gap))',
+          '--gauntlet-panel-inner-radius':
+            'calc(var(--gauntlet-panel-outer-radius) - var(--gauntlet-panel-halo-gap))',
+        } as CSSProperties
+      }
     >
-      {/* Decorative element */}
-      <div className='pointer-events-none absolute -bottom-16 -left-16 h-48 w-48 rounded-full bg-gradient-to-tr from-(--secondary-color)/5 to-transparent' />
+      <div className='group relative overflow-hidden rounded-(--gauntlet-panel-inner-radius) bg-(--card-color) p-6'>
+        {/* Decorative element */}
+        <div className='pointer-events-none absolute -bottom-16 -left-16 h-48 w-48 rounded-full bg-gradient-to-tr from-(--secondary-color)/5 to-transparent' />
 
-      <div className='relative z-10 flex flex-col gap-6'>
-        {/* Header */}
-        <div className='flex items-center gap-4'>
-          <motion.div
-            animate={{ rotate: [0, 5, -5, 0] }}
-            transition={{ duration: 3, repeat: Infinity, repeatDelay: 2 }}
-            className='flex h-14 w-14 items-center justify-center rounded-2xl border border-(--main-color)/20 bg-gradient-to-br from-(--main-color)/20 to-(--secondary-color)/10'
-          >
-            <Swords className='h-7 w-7 text-(--main-color)' />
-          </motion.div>
-          <div>
-            <h3 className='text-2xl font-bold text-(--main-color)'>Gauntlet</h3>
-            <p className='text-sm text-(--secondary-color)/70'>
-              Endurance challenge stats
-            </p>
+        <div className='relative z-10 flex flex-col gap-6'>
+          {/* Header */}
+          <div className='flex items-center gap-4'>
+            <motion.div
+              animate={{ rotate: [0, 5, -5, 0] }}
+              transition={{ duration: 3, repeat: Infinity, repeatDelay: 2 }}
+              className='flex h-14 w-14 items-center justify-center rounded-2xl border border-(--main-color)/20 bg-gradient-to-br from-(--main-color)/20 to-(--secondary-color)/10'
+            >
+              <Swords className='h-7 w-7 text-(--main-color)' />
+            </motion.div>
+            <div>
+              <h3 className='text-2xl font-bold text-(--main-color)'>
+                Gauntlet
+              </h3>
+              <p className='text-sm text-(--secondary-color)/70'>
+                Endurance challenge stats
+              </p>
+            </div>
           </div>
+
+          {/* Content */}
+          {isLoading ? (
+            <LoadingSkeleton />
+          ) : !hasData ? (
+            <EmptyState />
+          ) : (
+            <div className='grid grid-cols-2 gap-3'>
+              {statItems.map((item, idx) => (
+                <StatItem
+                  key={item.label}
+                  icon={item.icon}
+                  label={item.label}
+                  value={item.value}
+                  subValue={item.subValue}
+                  index={idx}
+                />
+              ))}
+            </div>
+          )}
         </div>
-
-        {/* Content */}
-        {isLoading ? (
-          <LoadingSkeleton />
-        ) : !hasData ? (
-          <EmptyState />
-        ) : (
-          <div className='grid grid-cols-2 gap-3'>
-            {statItems.map((item, idx) => (
-              <StatItem
-                key={item.label}
-                icon={item.icon}
-                label={item.label}
-                value={item.value}
-                subValue={item.subValue}
-                index={idx}
-              />
-            ))}
-          </div>
-        )}
       </div>
     </motion.div>
   );
@@ -260,3 +280,5 @@ export function getGauntletDisplayValues(stats: GauntletOverallStats): {
     accuracy: `${stats.accuracy.toFixed(1)}%`,
   };
 }
+
+

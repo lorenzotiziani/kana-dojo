@@ -1,11 +1,14 @@
 ﻿'use client';
 
 import { Flame, Trophy, Calendar, type LucideIcon } from 'lucide-react';
+import type { CSSProperties } from 'react';
 import {
   calculateCurrentStreak,
   calculateLongestStreak,
   calculateTotalVisits,
 } from '../lib/streakCalculations';
+
+const STREAK_STAT_CARD_HALO_GAP = 8;
 
 interface StatCardProps {
   title: string;
@@ -16,16 +19,29 @@ interface StatCardProps {
 
 function StatCard({ title, icon: Icon, value, description }: StatCardProps) {
   return (
-    <div className='rounded-2xl border border-(--border-color) bg-(--card-color) p-4'>
-      <div className='flex flex-row items-center justify-between space-y-0 pb-2'>
-        <h3 className='text-sm text-(--secondary-color)'>{title}</h3>
-        <Icon className='h-4 w-4 text-(--main-color)' />
-      </div>
-      <div className='flex flex-col gap-1 pt-2'>
-        <div className='text-2xl text-(--main-color)'>
-          {value} {value === 1 ? 'day' : 'days'}
+    <div
+      className='rounded-(--streak-stat-card-outer-radius) border-4 border-(--border-color) p-(--streak-stat-card-halo-gap)'
+      style={
+        {
+          '--streak-stat-card-halo-gap': `${STREAK_STAT_CARD_HALO_GAP}px`,
+          '--streak-stat-card-outer-radius':
+            'calc(var(--radius-2xl) + var(--streak-stat-card-halo-gap))',
+          '--streak-stat-card-inner-radius':
+            'calc(var(--streak-stat-card-outer-radius) - var(--streak-stat-card-halo-gap))',
+        } as CSSProperties
+      }
+    >
+      <div className='rounded-(--streak-stat-card-inner-radius) bg-(--card-color) p-4'>
+        <div className='flex flex-row items-center justify-between space-y-0 pb-2'>
+          <h3 className='text-sm text-(--secondary-color)'>{title}</h3>
+          <Icon className='h-4 w-4 text-(--main-color)' />
         </div>
-        <p className='text-xs text-(--secondary-color)'>{description}</p>
+        <div className='flex flex-col gap-1 pt-2'>
+          <div className='text-2xl text-(--main-color)'>
+            {value} {value === 1 ? 'day' : 'days'}
+          </div>
+          <p className='text-xs text-(--secondary-color)'>{description}</p>
+        </div>
       </div>
     </div>
   );

@@ -2,6 +2,7 @@
 
 import { useMemo } from 'react';
 import { motion } from 'framer-motion';
+import type { CSSProperties } from 'react';
 import { cn } from '@/shared/lib/utils';
 import type { MasteryDistribution } from '../../types/stats';
 import { ChartColumn } from 'lucide-react';
@@ -36,6 +37,9 @@ const MASTERY_CONFIG = {
     description: '<70% accuracy',
   },
 } as const;
+
+const MASTERY_DISTRIBUTION_HALO_GAP = 8;
+const MASTERY_SEGMENT_CARD_HALO_GAP = 6;
 
 /**
  * Calculates percentage for a value
@@ -108,16 +112,24 @@ export default function MasteryDistributionChart({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.3 }}
       className={cn(
-        'group relative overflow-hidden rounded-3xl',
-        'border border-(--border-color)/50 bg-(--card-color)',
-        'p-6',
+        'rounded-(--mastery-panel-outer-radius) border-4 border-(--border-color) p-(--mastery-panel-halo-gap)',
         className,
       )}
+      style={
+        {
+          '--mastery-panel-halo-gap': `${MASTERY_DISTRIBUTION_HALO_GAP}px`,
+          '--mastery-panel-outer-radius':
+            'calc(var(--radius-3xl) + var(--mastery-panel-halo-gap))',
+          '--mastery-panel-inner-radius':
+            'calc(var(--mastery-panel-outer-radius) - var(--mastery-panel-halo-gap))',
+        } as CSSProperties
+      }
     >
-      {/* Decorative element */}
-      <div className='pointer-events-none absolute -bottom-16 -left-16 h-48 w-48 rounded-full bg-gradient-to-tr from-(--secondary-color)/5 to-transparent' />
+      <div className='group relative overflow-hidden rounded-(--mastery-panel-inner-radius) bg-(--card-color) p-6'>
+        {/* Decorative element */}
+        <div className='pointer-events-none absolute -bottom-16 -left-16 h-48 w-48 rounded-full bg-gradient-to-tr from-(--secondary-color)/5 to-transparent' />
 
-      <div className='relative z-10 flex flex-col gap-6'>
+        <div className='relative z-10 flex flex-col gap-6'>
         {/* Header */}
         <div className='flex items-center justify-between'>
           <div>
@@ -199,34 +211,39 @@ export default function MasteryDistributionChart({
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, delay: 0.5 + idx * 0.1 }}
-                  className={cn(
-                    'group/item cursor-pointer rounded-2xl p-4',
-                    'bg-(--background-color)',
-                    'border border-transparent',
-                    'transition-colors duration-300',
-                    'hover:border-(--main-color)/20',
-                  )}
+                  className='rounded-(--mastery-segment-outer-radius) border-2 border-(--border-color) p-(--mastery-segment-halo-gap)'
+                  style={
+                    {
+                      '--mastery-segment-halo-gap': `${MASTERY_SEGMENT_CARD_HALO_GAP}px`,
+                      '--mastery-segment-outer-radius':
+                        'calc(var(--radius-2xl) + var(--mastery-segment-halo-gap))',
+                      '--mastery-segment-inner-radius':
+                        'calc(var(--mastery-segment-outer-radius) - var(--mastery-segment-halo-gap))',
+                    } as CSSProperties
+                  }
                 >
-                  <div className='flex items-center gap-3'>
-                    <div
-                      className='h-10 w-2 rounded-full'
-                      style={{ backgroundColor: `var(${config.colorVar})` }}
-                    />
-                    <div className='flex-1'>
-                      <div className='flex items-baseline gap-2'>
-                        <span className='text-2xl font-bold text-(--main-color)'>
-                          {value}
-                        </span>
-                        <span className='text-sm text-(--secondary-color)/60'>
-                          ({percent.toFixed(0)}%)
+                  <div className='group/item rounded-(--mastery-segment-inner-radius) bg-(--background-color) p-4'>
+                    <div className='flex items-center gap-3'>
+                      <div
+                        className='h-10 w-2 rounded-full'
+                        style={{ backgroundColor: `var(${config.colorVar})` }}
+                      />
+                      <div className='flex-1'>
+                        <div className='flex items-baseline gap-2'>
+                          <span className='text-2xl font-bold text-(--main-color)'>
+                            {value}
+                          </span>
+                          <span className='text-sm text-(--secondary-color)/60'>
+                            ({percent.toFixed(0)}%)
+                          </span>
+                        </div>
+                        <span
+                          className='text-sm font-medium'
+                          style={{ color: `var(${config.colorVar})` }}
+                        >
+                          {config.label}
                         </span>
                       </div>
-                      <span
-                        className='text-sm font-medium'
-                        style={{ color: `var(${config.colorVar})` }}
-                      >
-                        {config.label}
-                      </span>
                     </div>
                   </div>
                 </motion.div>
@@ -234,6 +251,7 @@ export default function MasteryDistributionChart({
             </div>
           </>
         )}
+      </div>
       </div>
     </motion.div>
   );

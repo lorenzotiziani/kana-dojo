@@ -188,7 +188,7 @@ export const AchievementCard = ({
 
             {isUnlocked && (
               <div className='rounded-full bg-(--main-color) px-2 py-1 text-xs text-(--background-color)'>
-                Unlocked ✓
+                Unlocked
               </div>
             )}
           </div>

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import type { CSSProperties } from 'react';
 import { cn } from '@/shared/lib/utils';
 import { Clock, Target, Zap, Trophy, Timer } from 'lucide-react';
 import { ActionButton } from '@/shared/components/ui/ActionButton';
@@ -30,6 +31,9 @@ const CONTENT_TABS: { value: ContentType; label: string }[] = [
   { value: 'vocabulary', label: 'Vocab' },
 ];
 
+const BLITZ_PANEL_HALO_GAP = 8;
+const BLITZ_STAT_ITEM_HALO_GAP = 6;
+
 /**
  * Individual stat item - color transitions only
  */
@@ -51,34 +55,44 @@ function StatItem({
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: index * 0.05 }}
-      className={cn(
-        'group/item cursor-pointer rounded-2xl p-4',
-        'bg-(--background-color)',
-        'border border-transparent',
-        'transition-colors duration-300',
-        'hover:border-(--main-color)/20',
-      )}
+      className='rounded-(--blitz-item-outer-radius) border-2 border-(--border-color) p-(--blitz-item-halo-gap)'
+      style={
+        {
+          '--blitz-item-halo-gap': `${BLITZ_STAT_ITEM_HALO_GAP}px`,
+          '--blitz-item-outer-radius':
+            'calc(var(--radius-2xl) + var(--blitz-item-halo-gap))',
+          '--blitz-item-inner-radius':
+            'calc(var(--blitz-item-outer-radius) - var(--blitz-item-halo-gap))',
+        } as CSSProperties
+      }
     >
-      <div className='flex items-center gap-4'>
-        <div
-          className={cn(
-            'flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl',
-            'bg-gradient-to-br from-(--main-color)/10 to-(--secondary-color)/5',
-            'text-(--main-color)',
-            'transition-colors duration-300',
-            'group-hover/item:from-(--main-color)/15 group-hover/item:to-(--secondary-color)/10',
-          )}
-        >
-          <Icon className='h-5 w-5' />
-        </div>
-        <div className='min-w-0 flex-1'>
-          <p className='text-xs font-medium text-(--secondary-color)'>
-            {label}
-          </p>
-          <p className='text-xl font-bold text-(--main-color)'>{value}</p>
-          {subValue && (
-            <p className='text-xs text-(--secondary-color)/60'>{subValue}</p>
-          )}
+      <div
+        className={cn(
+          'group/item rounded-(--blitz-item-inner-radius) bg-(--background-color) p-4',
+          'transition-colors duration-300 hover:border-(--main-color)/20',
+        )}
+      >
+        <div className='flex items-center gap-4'>
+          <div
+            className={cn(
+              'flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl',
+              'bg-gradient-to-br from-(--main-color)/10 to-(--secondary-color)/5',
+              'text-(--main-color)',
+              'transition-colors duration-300',
+              'group-hover/item:from-(--main-color)/15 group-hover/item:to-(--secondary-color)/10',
+            )}
+          >
+            <Icon className='h-5 w-5' />
+          </div>
+          <div className='min-w-0 flex-1'>
+            <p className='text-xs font-medium text-(--secondary-color)'>
+              {label}
+            </p>
+            <p className='text-xl font-bold text-(--main-color)'>{value}</p>
+            {subValue && (
+              <p className='text-xs text-(--secondary-color)/60'>{subValue}</p>
+            )}
+          </div>
         </div>
       </div>
     </motion.div>
@@ -167,81 +181,92 @@ export default function BlitzStatsPanel({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.4 }}
       className={cn(
-        'group relative overflow-hidden rounded-3xl',
-        'border border-(--border-color)/50 bg-(--card-color)',
-        'p-6',
+        'rounded-(--blitz-panel-outer-radius) border-4 border-(--border-color) p-(--blitz-panel-halo-gap)',
         className,
       )}
+      style={
+        {
+          '--blitz-panel-halo-gap': `${BLITZ_PANEL_HALO_GAP}px`,
+          '--blitz-panel-outer-radius':
+            'calc(var(--radius-3xl) + var(--blitz-panel-halo-gap))',
+          '--blitz-panel-inner-radius':
+            'calc(var(--blitz-panel-outer-radius) - var(--blitz-panel-halo-gap))',
+        } as CSSProperties
+      }
     >
-      {/* Decorative gradient */}
-      <div className='pointer-events-none absolute -right-16 -bottom-16 h-48 w-48 rounded-full bg-gradient-to-br from-(--main-color)/5 to-transparent' />
+      <div className='group relative overflow-hidden rounded-(--blitz-panel-inner-radius) bg-(--card-color) p-6'>
+        {/* Decorative gradient */}
+        <div className='pointer-events-none absolute -right-16 -bottom-16 h-48 w-48 rounded-full bg-gradient-to-br from-(--main-color)/5 to-transparent' />
 
-      <div className='relative z-10 flex flex-col gap-6'>
-        {/* Header */}
-        <div className='flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
-          <div className='flex items-center gap-4'>
-            <motion.div
-              animate={{ rotate: [0, 5, -5, 0] }}
-              transition={{ duration: 3, repeat: Infinity, repeatDelay: 2 }}
-              className='flex h-14 w-14 items-center justify-center rounded-2xl border border-(--main-color)/20 bg-gradient-to-br from-(--main-color)/20 to-(--secondary-color)/10'
-            >
-              <Zap className='h-7 w-7 text-(--main-color)' />
-            </motion.div>
-            <div>
-              <h3 className='text-2xl font-bold text-(--main-color)'>Blitz</h3>
-              <p className='text-sm text-(--secondary-color)/70'>
-                Speed challenge stats
-              </p>
+        <div className='relative z-10 flex flex-col gap-6'>
+          {/* Header */}
+          <div className='flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
+            <div className='flex items-center gap-4'>
+              <motion.div
+                animate={{ rotate: [0, 5, -5, 0] }}
+                transition={{ duration: 3, repeat: Infinity, repeatDelay: 2 }}
+                className='flex h-14 w-14 items-center justify-center rounded-2xl border border-(--main-color)/20 bg-gradient-to-br from-(--main-color)/20 to-(--secondary-color)/10'
+              >
+                <Zap className='h-7 w-7 text-(--main-color)' />
+              </motion.div>
+              <div>
+                <h3 className='text-2xl font-bold text-(--main-color)'>
+                  Blitz
+                </h3>
+                <p className='text-sm text-(--secondary-color)/70'>
+                  Speed challenge stats
+                </p>
+              </div>
+            </div>
+
+            {/* Pill tabs with smooth sliding animation */}
+            <div className='flex gap-1 rounded-[22px] bg-(--background-color) p-1.5'>
+              {CONTENT_TABS.map(tab => {
+                const isSelected = activeTab === tab.value;
+                return (
+                  <div key={tab.value} className='relative'>
+                    {/* Smooth sliding background indicator */}
+                    {isSelected && (
+                      <motion.div
+                        layoutId='activeBlitzTab'
+                        className='absolute inset-0 rounded-2xl border-b-10 border-(--main-color-accent) bg-(--main-color)'
+                        transition={{
+                          type: 'spring',
+                          stiffness: 300,
+                          damping: 30,
+                        }}
+                      />
+                    )}
+                    <button
+                      onClick={() => setActiveTab(tab.value)}
+                      className={cn(
+                        'relative z-10 cursor-pointer rounded-2xl px-5 pt-2 pb-4 text-sm font-semibold transition-colors duration-300',
+                        isSelected
+                          ? 'text-(--background-color)'
+                          : 'text-(--secondary-color)/70 hover:text-(--main-color)',
+                      )}
+                    >
+                      {tab.label}
+                    </button>
+                  </div>
+                );
+              })}
             </div>
           </div>
 
-          {/* Pill tabs with smooth sliding animation */}
-          <div className='flex gap-1 rounded-[22px] bg-(--background-color) p-1.5'>
-            {CONTENT_TABS.map(tab => {
-              const isSelected = activeTab === tab.value;
-              return (
-                <div key={tab.value} className='relative'>
-                  {/* Smooth sliding background indicator */}
-                  {isSelected && (
-                    <motion.div
-                      layoutId='activeBlitzTab'
-                      className='absolute inset-0 rounded-2xl border-b-10 border-(--main-color-accent) bg-(--main-color)'
-                      transition={{
-                        type: 'spring',
-                        stiffness: 300,
-                        damping: 30,
-                      }}
-                    />
-                  )}
-                  <button
-                    onClick={() => setActiveTab(tab.value)}
-                    className={cn(
-                      'relative z-10 cursor-pointer rounded-2xl px-5 pt-2 pb-4 text-sm font-semibold transition-colors duration-300',
-                      isSelected
-                        ? 'text-(--background-color)'
-                        : 'text-(--secondary-color)/70 hover:text-(--main-color)',
-                    )}
-                  >
-                    {tab.label}
-                  </button>
-                </div>
-              );
-            })}
-          </div>
+          {/* Stats content */}
+          <AnimatePresence mode='wait'>
+            <motion.div
+              key={activeTab}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              <ContentTypeStats stats={currentStats} />
+            </motion.div>
+          </AnimatePresence>
         </div>
-
-        {/* Stats content */}
-        <AnimatePresence mode='wait'>
-          <motion.div
-            key={activeTab}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-          >
-            <ContentTypeStats stats={currentStats} />
-          </motion.div>
-        </AnimatePresence>
       </div>
     </motion.div>
   );
@@ -267,3 +292,5 @@ export function getTimedModeDisplayValues(stats: TimedModeStats): {
     total: stats.correct + stats.wrong,
   };
 }
+
+

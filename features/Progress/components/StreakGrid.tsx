@@ -1,6 +1,7 @@
 'use client';
 
 import clsx from 'clsx';
+import type { CSSProperties } from 'react';
 import {
   type TimePeriod,
   getDaysInPeriod,
@@ -43,6 +44,8 @@ const FULL_MONTH_NAMES = [
   'November',
   'December',
 ];
+
+const STREAK_GRID_HALO_GAP = 8;
 
 /**
  * GitHub-style contribution grid cell
@@ -410,10 +413,23 @@ export default function StreakGrid({ visits, period }: StreakGridProps) {
   const days = getDaysInPeriod(period);
 
   return (
-    <div className='rounded-2xl border border-(--border-color) bg-(--card-color) p-5'>
-      {period === 'week' && <WeekGrid visits={visits} days={days} />}
-      {period === 'month' && <MonthGrid visits={visits} days={days} />}
-      {period === 'year' && <YearGrid visits={visits} days={days} />}
+    <div
+      className='rounded-(--streak-grid-outer-radius) border-4 border-(--border-color) p-(--streak-grid-halo-gap)'
+      style={
+        {
+          '--streak-grid-halo-gap': `${STREAK_GRID_HALO_GAP}px`,
+          '--streak-grid-outer-radius':
+            'calc(var(--radius-2xl) + var(--streak-grid-halo-gap))',
+          '--streak-grid-inner-radius':
+            'calc(var(--streak-grid-outer-radius) - var(--streak-grid-halo-gap))',
+        } as CSSProperties
+      }
+    >
+      <div className='rounded-(--streak-grid-inner-radius) bg-(--card-color) p-5'>
+        {period === 'week' && <WeekGrid visits={visits} days={days} />}
+        {period === 'month' && <MonthGrid visits={visits} days={days} />}
+        {period === 'year' && <YearGrid visits={visits} days={days} />}
+      </div>
     </div>
   );
 }
