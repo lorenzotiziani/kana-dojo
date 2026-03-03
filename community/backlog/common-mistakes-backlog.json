@@ -293,7 +293,7 @@
     "explanation": "Use ように for purpose/prevention. (Pattern set 2)",
     "id": 37,
     "issued": false,
-    "completed": false
+    "completed": true
   },
   {
     "wrong": "駅まで十分歩きますかかる。",
@@ -309,7 +309,7 @@
     "explanation": "Prefer noun linkage with の. (Pattern set 2)",
     "id": 39,
     "issued": false,
-    "completed": false
+    "completed": true
   },
   {
     "wrong": "私はお金がありませんです。",
@@ -325,7 +325,7 @@
     "explanation": "Do not stack ます and です in one predicate. (Pattern set 3)",
     "id": 41,
     "issued": false,
-    "completed": false
+    "completed": true
   },
   {
     "wrong": "日本語が好きをです。",
@@ -341,14 +341,14 @@
     "explanation": "な-adjectives require な before nouns. (Pattern set 3)",
     "id": 43,
     "issued": false,
-    "completed": false
+    "completed": true
   },
   {
     "wrong": "これはおいしいだ。",
     "correct": "これはおいしい。",
     "explanation": "い-adjectives do not take だ in plain present. (Pattern set 3)",
     "id": 44,
-    "issued": false,
+    "issued": true,
     "completed": false
   },
   {
