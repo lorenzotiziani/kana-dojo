@@ -2000,5 +2000,16 @@
       "forks": 5,
       "contributors": 4
     }
+  },
+  {
+    "collectedAt": "2026-06-07T20:44:46.020Z",
+    "stars": 2585,
+    "forks": 2225,
+    "contributors": 2036,
+    "diff": {
+      "stars": 6,
+      "forks": 13,
+      "contributors": 12
+    }
   }
 ]
