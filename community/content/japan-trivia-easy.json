@@ -296,12 +296,22 @@
     "correctAnswer": "Monte Fuji",
     "explanation": "O Monte Fuji é a montanha mais alta do Japão, com 3.776 metros de altitude."
   },
-
-  {
-    "id": 22,
-    "question": "Como se chamava a cidade de Tóquio antes de 1868?",
-    "options": ["Kyoto", "Edo", "Osaka", "Nara"],
-    "correctAnswer": "Edo",
-    "explanation": "A cidade era conhecida como Edo até a Restauração Meiji."
-  }
+{
+  "id": 22,
+  "question": "Como se chamava a cidade de Tóquio antes de 1868?",
+  "options": ["Kyoto", "Edo", "Osaka", "Nara"],
+  "correctAnswer": "Edo",
+  "explanation": "A cidade era conhecida como Edo até a Restauração Meiji."
+},
+{
+  "question": "Which of these is a Japanese noodle dish served in broth?",
+  "difficulty": "easy",
+  "answers": [
+    "Ramen",
+    "Takoyaki",
+    "Gyoza",
+    "Yakitori"
+  ],
+  "correctIndex": 0
+}
 ]
