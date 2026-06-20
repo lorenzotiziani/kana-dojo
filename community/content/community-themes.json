@@ -280,5 +280,11 @@
   "backgroundColor": "oklch(14.0% 0.045 250.0 / 1)",
   "mainColor": "oklch(80.0% 0.140 210.0 / 1)",
   "secondaryColor": "oklch(70.0% 0.120 310.0 / 1)"
+  },
+  {
+  "id": "coastal-shrine",
+  "backgroundColor": "oklch(20.0% 0.040 235.0 / 1)",
+  "mainColor": "oklch(78.0% 0.205 35.0 / 1)",
+  "secondaryColor": "oklch(88.0% 0.065 210.0 / 1)"
   }
 ]
