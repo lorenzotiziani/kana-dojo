@@ -1016,7 +1016,7 @@
     "game": "Fate/stay night [Realta Nua]",
     "character": "Saber",
     "id": 102,
-    "issued": false,
+    "issued": true,
     "completed": false
   },
   {
