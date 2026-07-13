@@ -350,7 +350,7 @@
   {
     "id": 59,
     "fact": "The word 'sawari' (触り) in Japanese means both 'touch' and 'the most interesting part' - suggesting you save the best for touching.",
-    "issued": false,
+    "issued": true,
     "completed": false
   },
   {
@@ -992,7 +992,7 @@
   {
     "id": 166,
     "fact": "Japan has a shrine in Kyoto where foxes are believed to be divine messengers - thousands of red torii gates lead to it.",
-    "issued": false,
+    "issued": true,
     "completed": false
   },
   {
@@ -1604,7 +1604,7 @@
   {
     "id": 268,
     "fact": "The word 'komachi' (小町) is used in place names to reference elegance, inspired by the legendary beauty Ono no Komachi.",
-    "issued": false,
+    "issued": true,
     "completed": false
   },
   {
@@ -1652,7 +1652,7 @@
   {
     "id": 276,
     "fact": "The term 'kirei' (綺麗) means both 'beautiful' and 'clean', linking aesthetics with neatness.",
-    "issued": false,
+    "issued": true,
     "completed": false
   },
   {

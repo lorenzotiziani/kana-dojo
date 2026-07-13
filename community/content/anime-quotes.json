@@ -461,4 +461,67 @@
     "anime": "Mobile Suit Gundam",
     "character": "Char Aznable"
   },
+  {
+    "japanese": "オラに元気を分けてくれ!",
+    "romaji": "Ora ni genki o wakete kure!",
+    "english": "Lend me your energy!",
+    "anime": "Dragon Ball Z",
+    "character": "Son Goku"
+  },
+  {
+    "japanese": "海賊王に、俺はなる！",
+    "romaji": "Kaizoku ou ni, ore wa naru!",
+    "english": "I'm gonna be the King of the Pirates!",
+    "anime": "One Piece",
+    "character": "Monkey D. Luffy"
+  },
+  {
+    "japanese": "おれは人間を超越する！",
+    "romaji": "Ore wa ningen o chouetsu suru!",
+    "english": "I will transcend humanity! (alt wording 14)",
+    "anime": "JoJo's Bizarre Adventure: Battle Tendency",
+    "character": "Kars"
+  },
+  {
+    "japanese": "諦めないってばよ!",
+    "romaji": "Akiramenai tte bayo!",
+    "english": "I never give up, believe it!",
+    "anime": "Naruto",
+    "character": "Naruto Uzumaki"
+  },
+  {
+    "japanese": "だが…それがいい。",
+    "romaji": "Daga... sore ga ii.",
+    "english": "But... that's what I like. (alt wording 16)",
+    "anime": "JoJo's Bizarre Adventure: Diamond is Unbreakable",
+    "character": "Yoshikage Kira"
+  },
+  {
+    "japanese": "やれやれだぜ",
+    "romaji": "Yare yare da ze",
+    "english": "Good grief. (alt wording 6)",
+    "anime": "JoJo's Bizarre Adventure: Stardust Crusaders",
+    "character": "Jotaro Kujo"
+  },
+  {
+    "japanese": "今日の俺は一味違うぜ！",
+    "romaji": "Kyou no ore wa hitomi chigau ze!",
+    "english": "I'm on a different level today! (alt wording 13)",
+    "anime": "JoJo's Bizarre Adventure: Diamond is Unbreakable",
+    "character": "Okuyasu Nijimura"
+  },
+  {
+    "japanese": "おまえはもう死んでいる",
+    "romaji": "Omae wa mou shindeiru",
+    "english": "You're already dead. (alt wording 18)",
+    "anime": "Fist of the North Star",
+    "character": "Kenshiro"
+  },
+  {
+    "japanese": "駆逐してやる!この世から一匹残らず!",
+    "romaji": "Kuchiku shite yaru! Kono yo kara ippiki nokorazu!",
+    "english": "I'll exterminate them! Every last one from this world! (alt wording 36)",
+    "anime": "Attack on Titan",
+    "character": "Eren Yeager"
+  },
 ]

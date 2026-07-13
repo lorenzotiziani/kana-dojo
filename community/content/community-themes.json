@@ -364,5 +364,23 @@
   "backgroundColor": "oklch(19.0% 0.050 20.0 / 1)",
   "mainColor": "oklch(65.0% 0.195 25.0 / 1)",
   "secondaryColor": "oklch(78.0% 0.105 85.0 / 1)"
+},
+{
+  "id": "mountain-onsen",
+  "backgroundColor": "oklch(20.0% 0.018 210.0 / 1)",
+  "mainColor": "oklch(80.0% 0.085 200.0 / 1)",
+  "secondaryColor": "oklch(68.0% 0.105 160.0 / 1)"
+},
+  {
+  "id": "kumo-sky",
+  "backgroundColor": "oklch(90.0% 0.020 220.0 / 1)",
+  "mainColor": "oklch(60.0% 0.090 215.0 / 1)",
+  "secondaryColor": "oklch(70.0% 0.060 200.0 / 1)"
+},
+  {
+  "id": "blooming-ume",
+  "backgroundColor": "oklch(95.0% 0.015 15.0 / 1)",
+  "mainColor": "oklch(62.0% 0.175 350.0 / 1)",
+  "secondaryColor": "oklch(75.0% 0.085 85.0 / 1)"
 }
 ]
